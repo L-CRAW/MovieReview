@@ -1,0 +1,16 @@
+<style>
+     body{
+	background-image: url(  .jpg);
+    background-position: 60% 100%;
+	background-size:cover;}
+    div#login{
+    line-height: 3;
+    font-family: Times New Roman;
+    font-size: 18px;
+    padding: 20px;
+    background: no-repeat;
+    border: 3px solid black;
+    background-color:azure;
+    width: 300px;
+    position:fixed;}
+    </style>
