@@ -81,9 +81,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangoMovieReview',
         'USER': 'root',
-        'PASSWORD': 'DaVinci.',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
-        'PORT': 3306,
+        'PORT': '3306',
     }
 }
 # Password validation
