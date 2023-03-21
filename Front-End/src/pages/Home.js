@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function Home() {
   const [movies, setMovies] = useState([]);
-
+//this will cause errors shown in the console of the web page
   useEffect(() => {
     fetch('http://127.0.0.1:8000/movies/')
       .then(response => response.json())
