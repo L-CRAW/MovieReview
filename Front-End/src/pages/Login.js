@@ -35,7 +35,7 @@ function Login() {
           <button type="submit" className="btn btn-primary w-100">Log In</button>
         </form>
         <div className="text-center mt-3">
-          <Link to="">Back to home page</Link>
+          <Link to="/">Back to home page</Link>
         </div>
       </div>
     </div>

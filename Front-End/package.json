@@ -8,10 +8,6 @@
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.2.3",
     "django-js-reverse": "^0.10.1-a.0",
-    "mysql": "^2.18.1",
-    "node": "^19.8.1",
-    "node-polyfill-webpack-plugin": "^2.0.1",
-    "path-browserify": "^1.0.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",
@@ -43,5 +39,4 @@
       "last 1 safari version"
     ]
   }
-
 }
