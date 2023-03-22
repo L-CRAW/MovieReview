@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { loginUser } from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
+import { useHistory } from 'react-router-dom';
+import { registerUser } from '../services/api';
 
-function Login() {
+function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
   const history = useHistory();
-  const { login } = useAuth();
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -17,19 +16,22 @@ function Login() {
     setPassword(event.target.value);
   };
 
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
   const handleSubmit = async (event) => {
-  event.preventDefault();
-  console.log(`Submitting login form with username: ${username} and password: ${password}`);
-  const userData = await loginUser(username, password);
-if (userData.success) {
- 
-  login(userData.user);
-  history.push('/movies');
-} else {
-  
-  alert('Login failed. Please check your username and password.');
-}
-};
+    event.preventDefault();
+    console.log(`Submitting registration form with username: ${username}, password: ${password}, and email: ${email}`);
+    const success = await registerUser(username, password, email);
+    if (success) {
+      
+      history.push('/login');
+    } else {
+      
+      alert('Registration failed. Please try again.');
+    }
+  };
 
   return (
     <div className="container my-5">
@@ -40,23 +42,20 @@ if (userData.success) {
               <label htmlFor="username" className="form-label">Username</label>
               <input type="text" id="username" className="form-control" value={username} onChange={handleUsernameChange} />
             </div>
-            <div className="form-group mb-4">
+            <div className="form-group mb-3">
               <label htmlFor="password" className="form-label">Password</label>
               <input type="password" id="password" className="form-control" value={password} onChange={handlePasswordChange} />
             </div>
-            <button type="submit" className="btn btn-primary w-100">Log In</button>
-            <div className="mt-3 text-center">
-              <p className="mb-0">Don't have an account?</p>
-              <Link to="/register">Register here.</Link>
+            <div className="form-group mb-4">
+              <label htmlFor="email" className="form-label">Email</label>
+              <input type="email" id="email" className="form-control" value={email} onChange={handleEmailChange} />
             </div>
+            <button type="submit" className="btn btn-primary w-100">Register</button>
           </form>
-          <div className="text-center mt-3">
-            <Link to="/">Back to home page</Link>
-          </div>
         </div>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default Register;
