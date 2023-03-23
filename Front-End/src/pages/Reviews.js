@@ -16,6 +16,11 @@ const ReviewPage = () => {
 
 
   const handleVote = async (reviewId, vote, username) => {
+    if (!currentUser) {
+      alert('You need to be logged in to vote on a review.');
+      return;
+    }
+
     const data = await voteReview(reviewId, vote, username);
     if (data && data.success) {
       const updatedReview = data.review;
@@ -34,6 +39,7 @@ const ReviewPage = () => {
     }
   };
 
+
   return (
     <div className="container mt-4">
       <h1>Reviews</h1>
@@ -48,13 +54,13 @@ const ReviewPage = () => {
             <div>
               <button
                 className="btn btn-sm btn-outline-primary mr-2"
-                onClick={() => handleVote(review.id, "up", currentUser.username)}
+                onClick={() => handleVote(review.id, "up", currentUser?.username)}
               >
                 Upvote
               </button>
               <button
                 className="btn btn-sm btn-outline-danger mr-2"
-                onClick={() => handleVote(review.id, "down", currentUser.username)}
+                onClick={() => handleVote(review.id, "down", currentUser?.username)}
               >
                 Downvote
               </button>

@@ -55,7 +55,7 @@ def submit_review(request):
                 movie.avg_rating = review.rating
             else:
                 movie.num_reviews = F('num_reviews') + 1
-                movie.avg_rating = (F('avg_rating') * F('num_reviews') + review.rating) / F('num_reviews') + 1
+                movie.avg_rating = (F('avg_rating') * F('num_reviews') + review.rating) / ((F('num_reviews')) + 1)
 
             movie.save(update_fields=['num_reviews', 'avg_rating'])
 
@@ -180,3 +180,89 @@ def register(request):
             return JsonResponse({'success': False})
 
     return JsonResponse({'error': 'Invalid request method'})
+
+def get_recommendations(request, username):
+    user = User.objects.get(username=username)
+    user_reviews = Review.objects.filter(user=user)
+    
+    similar_users = set()
+    
+    for review in user_reviews:
+        similar_reviews = Review.objects.filter(
+            movie=review.movie, rating__range=(review.rating - 10, review.rating + 10)
+        ).exclude(user=user)
+        for r in similar_reviews:
+            similar_users.add(r.user)
+    
+    recommended_movies = set()
+    
+    for similar_user in similar_users:
+        highly_rated_reviews = Review.objects.filter(user=similar_user, rating__gte=70)
+        for review in highly_rated_reviews:
+            if not user_reviews.filter(movie=review.movie).exists():
+                recommended_movies.add(review.movie)
+    
+    recommended_movies_data = []
+    for movie in recommended_movies:
+        user_who_recommended = Review.objects.filter(user__in=similar_users, movie=movie, rating__gte=70).first().user
+        recommended_movies_data.append({
+            "id": movie.id,
+            "title": movie.title,
+            "synopsis": movie.synopsis,
+            "avg_rating": movie.avg_rating,
+            "num_reviews": movie.num_reviews,
+            "recommended_by": user_who_recommended.username
+        })
+
+    return JsonResponse({"recommended_movies": recommended_movies_data})
+
+def movie_reviews(request, movie_id):
+    if request.method == 'GET':
+        try:
+            movie = Movie.objects.get(pk=movie_id)
+            reviews = Review.objects.filter(movie=movie)
+
+            reviews_data = []
+
+            for review in reviews:
+                reviews_data.append({
+                    'id': review.id,
+                    'review_text': review.review_text,
+                    'rating': review.rating,
+                    'user': {
+                        'username': review.user.username,
+                    },
+                    'score': review.score,
+                    'upvoted_users': list(review.upvoted_users.values('username')),
+                    'downvoted_users': list(review.downvoted_users.values('username')),
+                })
+
+            return JsonResponse({'reviews': reviews_data})
+
+        except ObjectDoesNotExist:
+            return JsonResponse({'error': 'Movie not found'})
+
+    return JsonResponse({'error': 'Invalid request method'})
+
+def movie_details_api(request, movie_id):
+    if request.method == 'GET':
+        try:
+            movie = Movie.objects.get(pk=movie_id)
+            movie_data = {
+                'id': movie.id,
+                'title': movie.title,
+                'synopsis': movie.synopsis,
+                'director': movie.director,
+                'main_cast': movie.main_cast,
+                'release_date': movie.release_date,
+                'avg_rating' : movie.avg_rating,
+                'num_reviews' : movie.num_reviews,
+            }
+            return JsonResponse(movie_data)
+        except ObjectDoesNotExist:
+            return JsonResponse({'error': 'Movie not found'}, status=404)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+def top_movies_api(request):
+    top_movies = Movie.objects.order_by('-avg_rating')[:10]
+    return JsonResponse({'movies': list(top_movies.values())}, safe=False)

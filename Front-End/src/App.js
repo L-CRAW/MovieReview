@@ -6,7 +6,9 @@ import Movies from './pages/Movies';
 import Register from './pages/Registration';
 import UploadReview from './pages/UploadReview';
 import Profile from './pages/Profile';
+import MovieDetails from './components/MovieDetails';
 import Reviews from './pages/Reviews';
+import Recommendations from './pages/Recommendations';
 import Header from './components/Header';
 import { AuthProvider } from './contexts/AuthContext'; 
 
@@ -37,6 +39,10 @@ function App() {
           <Route path="/reviews">
             <Reviews />
           </Route>
+          <Route path="/recommendations">
+            <Recommendations />
+          </Route>
+          <Route path="/movie/:movieId" component={MovieDetails} />
         </Switch>
       </Router>
     </AuthProvider>

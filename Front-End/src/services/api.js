@@ -100,3 +100,19 @@ export const voteReview = async (reviewId, vote, username) => {
     return null;
   }
 };
+export const getRecommendedMovies = async (username) => {
+  const response = await fetch(`${BASE_URL}/api/recommendations/${username}`);
+  const data = await response.json();
+  return data.recommended_movies;
+};
+
+export const getReviewsForMovie = async (id) => {
+  const response = await fetch(`${BASE_URL}/api/movie_reviews/${id}`);
+  const data = await response.json();
+  return data.reviews;
+};
+export const getTopMovies = async (numMovies) => {
+  const response = await fetch(`${BASE_URL}/api/top_movies/?num_movies=${numMovies}`);
+  const data = await response.json();
+  return data.movies;
+};

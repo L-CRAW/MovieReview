@@ -32,7 +32,7 @@ function Header() {
   }, [currentUser, userVersion]);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light" key={currentUser ? currentUser.username : 'anonymous'}>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-info" key={currentUser ? currentUser.username : 'anonymous'}>
       <div className="container">
         <Link to="/" className="navbar-brand">
           <img src={logo} alt="Movie Review" width="80" height="auto" />
@@ -44,13 +44,16 @@ function Header() {
         <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link to="/" className="nav-link" onClick={() => setIsMenuOpen(false)}>Home</Link>
+              <Link to="/" className="nav-link text-dark" onClick={() => setIsMenuOpen(false)}>Home</Link>
             </li>
             <li className="nav-item">
-              <Link to="/movies" className="nav-link" onClick={() => setIsMenuOpen(false)}>Movies</Link>
+              <Link to="/recommendations" className="nav-link text-dark" onClick={() => setIsMenuOpen(false)}>Recommendations</Link>
             </li>
             <li className="nav-item">
-              <Link to="/reviews" className="nav-link" onClick={() => setIsMenuOpen(false)}>Reviews</Link>
+              <Link to="/movies" className="nav-link text-dark" onClick={() => setIsMenuOpen(false)}>Movies</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/reviews" className="nav-link text-dark" onClick={() => setIsMenuOpen(false)}>Reviews</Link>
             </li>
             {currentUser ? (
               <li className="nav-item dropdown">
