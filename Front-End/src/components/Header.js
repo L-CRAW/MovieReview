@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import logo from '../assets/moviereviewlogo.png';
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,7 +35,8 @@ function Header() {
     <nav className="navbar navbar-expand-lg navbar-light bg-light" key={currentUser ? currentUser.username : 'anonymous'}>
       <div className="container">
         <Link to="/" className="navbar-brand">
-          <img src="/logo.png" alt="Movie Review Logo" width="80" height="auto" />
+          <img src={logo} alt="Movie Review" width="80" height="auto" />
+          <span className="ms-2 h-100 d-inline-block align-middle fw-bold">Movie Review</span>
         </Link>
         <button className="navbar-toggler" type="button" onClick={handleMenuToggle}>
           <span className="navbar-toggler-icon"></span>
