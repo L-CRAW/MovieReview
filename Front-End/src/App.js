@@ -16,7 +16,9 @@ function App() {
   return (
     <AuthProvider> 
       <Router>
+        {/* Render the Header component */}
         <Header/>
+        {/* Define routes using the Switch component */}
         <Switch>
           <Route exact path="/">
             <Home />
@@ -42,6 +44,7 @@ function App() {
           <Route path="/recommendations">
             <Recommendations />
           </Route>
+          {/* Define a dynamic route for MovieDetails component */}
           <Route path="/movie/:movieId" component={MovieDetails} />
         </Switch>
       </Router>

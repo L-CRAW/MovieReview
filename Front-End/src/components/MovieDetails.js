@@ -2,11 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getMovieById, getReviewsForMovie } from '../services/api';
 
+// Define MovieDetails component
 const MovieDetails = () => {
+
+  // Get movieId
   const { movieId } = useParams();
+
+  // Declare state variables for movie and its reviews
   const [movie, setMovie] = useState(null);
   const [reviews, setReviews] = useState([]);
 
+  // Fetch movie details and its reviews using API service functions
   useEffect(() => {
     const fetchMovieDetails = async () => {
       const movieData = await getMovieById(movieId);
@@ -22,6 +28,7 @@ const MovieDetails = () => {
     fetchReviews();
   }, [movieId]);
 
+  // Render the movie details and its reviews once they are available
   if (!movie) return <div>Loading...</div>;
 
   return (

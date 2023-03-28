@@ -3,10 +3,16 @@ import { Container, Card, ListGroup } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserReviews } from '../services/api';
 
+// Profile component to display user information and reviews
 function Profile() {
+
+   // Destructuring the currentUser object from the AuthContext
   const { currentUser } = useAuth();
+
+  // State to store the user's reviews
   const [reviews, setReviews] = useState([]);
 
+  // useEffect to fetch the user's reviews when the currentUser object is available
   useEffect(() => {
     if (currentUser) {
       getUserReviews(currentUser.username).then((data) => {

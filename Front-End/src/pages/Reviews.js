@@ -3,11 +3,15 @@ import { getAllReviews, voteReview } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 const ReviewPage = () => {
+
+  // Initialize state for reviews
   const [reviews, setReviews] = useState([]);
+
+  // Get current user from authentication context
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    const fetchReviews = async () => {
+    const fetchReviews = async () => { // Fetch all reviews from the API
       const fetchedReviews = await getAllReviews();
       setReviews(fetchedReviews);
     };
@@ -15,13 +19,17 @@ const ReviewPage = () => {
   }, []);
 
 
+  // Handle voting on a review and check user is logged in
   const handleVote = async (reviewId, vote, username) => {
     if (!currentUser) {
       alert('You need to be logged in to vote on a review.');
       return;
     }
 
+    // Vote on the review using the API
     const data = await voteReview(reviewId, vote, username);
+
+    // Update the state with the new review data
     if (data && data.success) {
       const updatedReview = data.review;
       const updatedReviews = reviews.map((review) => {

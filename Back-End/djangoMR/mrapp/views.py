@@ -9,10 +9,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
 
+# API view to retrieve all movies in the database
 def movies_api(request):
     movies = Movie.objects.all().values() 
     return JsonResponse({'movies': list(movies)}, safe=False)  
 
+# API view to search for a movie by its title
 def search_movie(request):
     title = request.GET.get('title', '')
     try:
@@ -21,6 +23,7 @@ def search_movie(request):
     except Movie.DoesNotExist:
         return JsonResponse({'movie': None})
     
+# API view to add a new movie to the database    
 @csrf_exempt
 def add_movie(request):
     if request.method == 'POST':
@@ -36,6 +39,7 @@ def add_movie(request):
     return JsonResponse({'error': 'Invalid request method'})
 
 
+# API view to submit a review for a movie
 @csrf_exempt
 def submit_review(request):
     if request.method == 'POST':
@@ -50,6 +54,7 @@ def submit_review(request):
                 rating=data['userRating']
             )
 
+            # Update movie's average rating and number of reviews
             if movie.num_reviews == 0:
                 movie.num_reviews = 1
                 movie.avg_rating = review.rating
@@ -65,6 +70,7 @@ def submit_review(request):
 
     return JsonResponse({'error': 'Invalid request method'})
 
+# API view to retrieve all reviews by a particular user
 def user_reviews(request, username=None):
     if request.method == 'GET':
         if username:
@@ -96,7 +102,7 @@ def user_reviews(request, username=None):
 
     return JsonResponse({'error': 'Invalid request method'})
 
-
+# API view to upvote or downvote a review
 @csrf_exempt
 def vote_review(request, review_id, vote):
     if request.method == 'POST':
@@ -107,6 +113,7 @@ def vote_review(request, review_id, vote):
             user = User.objects.get(username=username)
             review = Review.objects.get(pk=review_id)
 
+            # Update the review score based on the user's vote
             if vote == "up":
                 if user in review.downvoted_users.all():
                     review.downvoted_users.remove(user)
@@ -125,7 +132,8 @@ def vote_review(request, review_id, vote):
                     review.score = F('score') - 1
             else:
                 return JsonResponse({'success': False, 'error': 'Invalid vote action'})
-
+            
+             # Save the updated review and return the new score and upvoted/downvoted user lists
             review.save(update_fields=['score'])
             review.refresh_from_db() 
 
@@ -151,6 +159,7 @@ def login(request):
         username = data.get('username')
         password = data.get('password')
         
+         # Authenticate user credentials and log the user in
         user = authenticate(request, username=username, password=password)
         
 
@@ -173,6 +182,7 @@ def register(request):
         email = data.get('email')
 
         try:
+             # Create a new user with the provided credentials and log them in
             user = User.objects.create_user(username=username, password=password, email=email)
             auth_login(request, user)
             return JsonResponse({'success': True})
@@ -182,9 +192,12 @@ def register(request):
     return JsonResponse({'error': 'Invalid request method'})
 
 def get_recommendations(request, username):
+
+    # Get the user and their reviews
     user = User.objects.get(username=username)
     user_reviews = Review.objects.filter(user=user)
-    
+
+    # Find similar users based on reviews with similar ratings for the same movie
     similar_users = set()
     
     for review in user_reviews:
@@ -194,6 +207,7 @@ def get_recommendations(request, username):
         for r in similar_reviews:
             similar_users.add(r.user)
     
+    # Find highly rated reviews for similar movies by similar users
     recommended_movies = set()
     
     for similar_user in similar_users:
@@ -202,6 +216,7 @@ def get_recommendations(request, username):
             if not user_reviews.filter(movie=review.movie).exists():
                 recommended_movies.add(review.movie)
     
+    # Return recommended movie data
     recommended_movies_data = []
     for movie in recommended_movies:
         user_who_recommended = Review.objects.filter(user__in=similar_users, movie=movie, rating__gte=70).first().user
@@ -216,6 +231,7 @@ def get_recommendations(request, username):
 
     return JsonResponse({"recommended_movies": recommended_movies_data})
 
+# This function gets all reviews for a given movie
 def movie_reviews(request, movie_id):
     if request.method == 'GET':
         try:
@@ -244,6 +260,7 @@ def movie_reviews(request, movie_id):
 
     return JsonResponse({'error': 'Invalid request method'})
 
+# This function gets detailed information about a given movie
 def movie_details_api(request, movie_id):
     if request.method == 'GET':
         try:
@@ -263,6 +280,7 @@ def movie_details_api(request, movie_id):
             return JsonResponse({'error': 'Movie not found'}, status=404)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+# This function gets the top 10 movies based on average rating
 def top_movies_api(request):
     top_movies = Movie.objects.order_by('-avg_rating')[:10]
     return JsonResponse({'movies': list(top_movies.values())}, safe=False)

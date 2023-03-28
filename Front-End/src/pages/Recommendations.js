@@ -4,9 +4,14 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 
 const Recommendations = () => {
+
+  // State to store the recommended movies
   const [recommendedMovies, setRecommendedMovies] = useState([]);
+
+  // Destructuring the currentUser object from the AuthContext
   const { currentUser } = useAuth();
 
+  // useEffect to fetch the recommended movies for the current user
   useEffect(() => {
     const fetchRecommendedMovies = async () => {
       const movies = await getRecommendedMovies(currentUser.username);

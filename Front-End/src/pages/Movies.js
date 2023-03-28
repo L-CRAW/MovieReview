@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 const Movies = () => {
   const [movies, setMovies] = useState([]);
 
+  // fetch all movies from the database
   useEffect(() => {
     const fetchMovies = async () => {
       const data = await getAllMovies();
@@ -13,6 +14,7 @@ const Movies = () => {
     fetchMovies();
   }, []);
 
+  // when the movie title is clicked on redirect to that movie's details page
   return (
     <div className="container">
       <h1 className="text-center my-4" style={{ color: '#FF6347' }}>Movies</h1>
@@ -33,9 +35,9 @@ const Movies = () => {
             {movies.map((movie) => (
               <tr key={movie.id}>
                 <td>
-                  <Link to={`/movie/${movie.id}`} className="text-decoration-none text-dark">
+                  <Link to={`/movie/${movie.id}`} className="text-decoration-none text-dark"> 
                     {movie.title}
-                  </Link>
+                  </Link> 
                 </td>
                 <td>{movie.release_date}</td>
                 <td>{movie.synopsis}</td>

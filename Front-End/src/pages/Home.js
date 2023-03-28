@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { getTopMovies } from '../services/api';
 
 function Home() {
+  // Set up state for movies and initialize to an empty array
   const [movies, setMovies] = useState([]);
 
+  // Fetch top movies from API when component mounts
   useEffect(() => {
     const fetchTopMovies = async () => {
       const data = await getTopMovies(3);
@@ -13,6 +15,7 @@ function Home() {
     fetchTopMovies();
   }, []);
 
+  // Render
   return (
     <div className="container my-5">
       <div className="row justify-content-center">
@@ -38,6 +41,7 @@ function Home() {
                     ))}
                   </ul>
                 ) : (
+                  // If there are no movies to display, show a loading message
                   <p>Loading...</p>
                 )}
             </div>

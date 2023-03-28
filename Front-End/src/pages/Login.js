@@ -4,11 +4,14 @@ import { loginUser } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 function Login() {
+
+  // Define state variables
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const history = useHistory();
-  const { login } = useAuth();
+  const { login } = useAuth(); // use login function from useAuth hook to update state in AuthContext
 
+  // Define event handlers to update state when input values change
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -17,17 +20,18 @@ function Login() {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  // Define submit handler to send login request and update state if successful
+  const handleSubmit = async (event) => { 
   event.preventDefault();
   console.log(`Submitting login form with username: ${username} and password: ${password}`);
   const userData = await loginUser(username, password);
-if (userData.success) {
+if (userData.success) { // If login is successful
  
-  login(userData.user);
-  history.push('/movies');
+  login(userData.user); // Update state in AuthContext
+  history.push('/movies'); // Navigate to movies page
 } else {
   
-  alert('Login failed. Please check your username and password.');
+  alert('Login failed. Please check your username and password.'); // Display error message
 }
 };
 

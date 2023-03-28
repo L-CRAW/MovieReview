@@ -3,9 +3,11 @@ import { searchMovie, addMovie, submitReview } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 function UploadReview() {
+
+  // Defining state variables
   const [movieTitle, setMovieTitle] = useState('');
   const [movieFound, setMovieFound] = useState(false);
-  const [movie, setMovie] = useState(null);
+  const [setMovie] = useState(null);
   const { currentUser } = useAuth();
   const [movieDetails, setMovieDetails] = useState({
     title: '',
@@ -21,6 +23,7 @@ function UploadReview() {
     userRating: ''
   });
 
+  // Handling the movie search when the user clicks the "Search Movie" button
   const handleMovieSearch = async () => {
     const result = await searchMovie(movieTitle);
     if (result) {
@@ -32,6 +35,7 @@ function UploadReview() {
     }
   };
 
+  // Handling the changes in the movie details input fields
   const handleMovieDetailsChange = (event) => {
     setMovieDetails({
       ...movieDetails,
@@ -39,6 +43,7 @@ function UploadReview() {
     });
   };
 
+  // Handling the changes in the review input fields
   const handleReviewChange = (event) => {
     setReview({
       ...review,
@@ -46,6 +51,7 @@ function UploadReview() {
     });
   };
 
+  // Handling the submission of movie details
   const handleSubmitMovie = async () => {
     const newMovie = await addMovie(movieDetails);
     if (newMovie) {
@@ -56,6 +62,7 @@ function UploadReview() {
     }
   };
 
+  // Handling the submission of the review
   const handleSubmitReview = async () => {
     const success = await submitReview(review, currentUser.username);
     if (success) {

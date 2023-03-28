@@ -3,11 +3,14 @@ import { useHistory } from 'react-router-dom';
 import { registerUser } from '../services/api';
 
 function Register() {
+
+  // Define state variables for form inputs
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const history = useHistory();
 
+  // Event handlers for username, password and email input
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -20,15 +23,18 @@ function Register() {
     setEmail(event.target.value);
   };
 
+  // Event handler for form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(`Submitting registration form with username: ${username}, password: ${password}, and email: ${email}`);
     const success = await registerUser(username, password, email);
     if (success) {
-      
+
+      // Redirect to login page upon successful registration
       history.push('/login');
     } else {
       
+      // Display error message if registration fails
       alert('Registration failed. Please try again.');
     }
   };

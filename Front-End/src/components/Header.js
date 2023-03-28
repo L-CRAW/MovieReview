@@ -3,16 +3,22 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import logo from '../assets/moviereviewlogo.png';
 
+// Header component for the navigation menu
 function Header() {
+
+  // State to manage the menu open or close status
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+   // Destructuring the needed values from the AuthContext
   const { currentUser, logout, userVersion } = useAuth();
 
+  // Function to toggle the menu open/close state
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // useRef and useEffect to handle clicks outside of the dropdown menu
   const dropdownRef = useRef();
-
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -27,6 +33,7 @@ function Header() {
     };
   }, [dropdownRef]);
 
+  // useEffect to close the menu when currentUser or userVersion changes
   useEffect(() => {
     setIsMenuOpen(false);
   }, [currentUser, userVersion]);
