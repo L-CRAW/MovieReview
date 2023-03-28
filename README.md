@@ -17,10 +17,30 @@ Make sure these are installed:
 - Rest Framework
 - Cors Headers 
 
-# Start Front-End
+Navigate to the directory MovieReview/Back-End/DjangoMR:
 
-navigate to the directory MoviewReview/Front-End/
-run 'npm install'
-then run 'npm start'
-The application should now be running on http://localhost:3000
+- ensure models are migrated:
+  - python manage.py makemigrations
+  - python manage.py migrate
 
+- start the server:
+  - python manage.py runserver 
+
+Ensure the BASE_URL in api.js in the Front-End is the same as the Django server
+
+# Start Front-End for development
+
+- navigate to the directory MoviewReview/Front-End/
+- run 'npm install'
+- then run 'npm start'
+- The application should now be running on http://localhost:3000
+
+# Run Back-End unit tests
+
+- python manage.py test mrapp
+
+# Run Front-End unit tests
+
+navigate to MovieReview/Front-End/src/unitTests
+
+- run 'python test_login.py'
