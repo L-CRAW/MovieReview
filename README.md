@@ -44,3 +44,11 @@ Ensure the BASE_URL in api.js in the Front-End is the same as the Django server
 navigate to MovieReview/Front-End/src/unitTests
 
 - run 'python test_login.py'
+
+# Mock Account
+
+Using this account, one can view recommendations as the account has written reviews already.
+
+- Go to log in:
+  - Username: Craw
+  - Password: 123456
